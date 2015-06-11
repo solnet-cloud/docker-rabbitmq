@@ -10,6 +10,8 @@ FROM ubuntu:14.04
 #      --tag "solnetcloud/rabbitmq:3.5.3"
 
 # Run Instructions:
+# When running use the following flags:
+#       --restart=on-failure  --log-driver=syslog
 # TODO
 #
 #
@@ -40,5 +42,12 @@ RUN curl http://www.rabbitmq.com/rabbitmq-signing-key-public.asc | sudo apt-key 
 # Update the sources
 RUN apt-get update
 
-# download and install rabbitmq-server
-RUN sudo apt-get install rabbitmq-server
+# download and install rabbitmq-server and extra packages - TODO: check if python is actually required
+RUN \
+	 sudo apt-get install rabbitmq-server python-software-properties python python-jinja2 python-ipy && \
+	apt-get clean 
+
+# Set timezone
+RUN \
+    echo "Pacific/Auckland" > /etc/timezone && \
+    dpkg-reconfigure -f noninteractive tzdata
