@@ -22,6 +22,8 @@ from IPy import IP
 from shutil import copyfile
 
 # Functions
+
+# Checks if an ip address is valid or not
 def isIP(address):
    try:
       IP(address)
@@ -30,14 +32,20 @@ def isIP(address):
       ip = False
    return ip
 
+# Define the cleanup function
+def cleanup(child):
+    # Warning: This function can be registered more than once, code defensively!
+    if child is not None: # Make sure the child actually exists
+        print "Sending SIGTERM"
+        child.terminate() # Terminate the child cleanly
+        try:
+            for line in iter(child.stdout.readline, ''): # Clear the buffer of any lines remaining
+                sys.stdout.write(line)
+        except IOError:
+            pass # No output found, resulted in IOError
+
+
 # Variables/Consts TODO: CHANGED THESE
-mysql_path = '/var/lib/mysql'
-mysql_init_check_file = mysql_path + '/ibdata1'
-mysql_user = 'mysql'
-mysql_group = 'mysql'
-mysql_my_cnf = '/etc/mysql/my.cnf'
-mysql_default_cnf = '/usr/share/mysql/my-default.cnf'
-first_run = False
 
 
 ########################################################################################################################
@@ -47,7 +55,7 @@ first_run = False
 # A minimum of 2 positional arguments required:
 # rep_addr - The replication IP address of this node in the cluster
 # member_addr - Replication IP address(es) of other member(s) of the cluster
-# These are used to create the wsrep.cnf file used by wsrep for write synchronous replication
+# These are used to allow the nodes to be successfully clustered
 argparser = argparse.ArgumentParser(description='Run a docker container containing a RabbitMQ Instance')
 
 argparser.add_argument('rep_addr',
@@ -284,22 +292,6 @@ for template_item in template_list:
        errormsg += " %s (returned %s), terminating..." % template_item, e
        print errormsg
        sys.exit(0) # This should be a return 0 to prevent the container from restarting
-
-
-########################################################################################################################
-# Fix permissons on /var/lib/mysql                                                                                     #
-########################################################################################################################
-uid = pwd.getpwnam(mysql_user).pw_uid
-gid = grp.getgrnam(mysql_group).gr_gid
-# DB path
-for root, dirs, files in os.walk(mysql_path):
-   for name in dirs:
-      dirname = os.path.join(root, name)
-      os.chown(dirname, uid, gid)
-   for name in files:
-      fname = os.path.join(root, name)
-      os.chown(fname, uid, gid)
-
 
 ########################################################################################################################
 # SPAWN CHILD                                                                                                          #
