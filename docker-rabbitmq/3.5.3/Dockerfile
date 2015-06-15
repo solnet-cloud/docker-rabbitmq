@@ -64,12 +64,18 @@ COPY scripts/entry.py /usr/local/bin/entry
 RUN chmod +x /usr/local/bin/entry
 
 # Expose ports to other containers
-# Expose port 5672: RabbitMQ
-# Expose port 4369: clustering - epmd port
-# Expose port 25672: clustering
+
 EXPOSE 5672
 EXPOSE 4369
 EXPOSE 25672
+EXPOSE 15672
+
+EXPOSE 9100
+EXPOSE 9101
+EXPOSE 9102
+EXPOSE 9103
+EXPOSE 9104
+EXPOSE 9105
 
 # Define the default command as entrypoint
 ENTRYPOINT ["/usr/local/bin/entry"]
