@@ -55,3 +55,11 @@ RUN sudo cat config/rabbitmq-server > /etc/default/rabbitmq-server
 RUN \
     echo "Pacific/Auckland" > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata
+
+# Expose ports to other containers
+# Expose port 5672: RabbitMQ
+# Expose port 4369: clustering
+# Expose port 25672: clustering
+EXPOSE 5672
+EXPOSE 4369
+EXPOSE 25672
