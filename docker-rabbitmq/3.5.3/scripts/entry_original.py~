@@ -1,8 +1,9 @@
 #!/usr/bin/env python
-# This script parses command line arguments and uses these to create nodes for the RabbitMQ service
+# This script takes command line options and
+# starts up mysqld
 
 ########################################################################################################################
-# LIBRARY TODO: Seemingly I don't need to remove any parts of this code, but it could be better form to not 	       # #IMPORT                                                                                                       	       #
+# LIBRARY IMPORT                                                                                                       #
 ########################################################################################################################
 # Import required libaries
 import sys,os,pwd,grp   # OS Libraries
@@ -20,6 +21,7 @@ from jinja2.exceptions import TemplateNotFound
 # Specific to to this script
 from IPy import IP
 from shutil import copyfile
+import MySQLdb
 
 # Functions
 def isIP(address):
@@ -30,7 +32,7 @@ def isIP(address):
       ip = False
    return ip
 
-# Variables/Consts TODO: CHANGED THESE
+# Variables/Consts
 mysql_path = '/var/lib/mysql'
 mysql_init_check_file = mysql_path + '/ibdata1'
 mysql_user = 'mysql'
@@ -59,6 +61,30 @@ argparser.add_argument('member_addr',
                        nargs='+',
                        help='Replication IP address(es) for other member(s) of the cluster')
 
+argparser.add_argument('--cluster-name','-c',
+                       action='store',
+                       nargs='?',
+                       help='The MySQL wsrep cluster name, "DBCluster"')
+
+argparser.add_argument('--rep-user','-u',
+                       action='store',
+                       nargs='?',
+                       help='The MySQL wsrep replication user, "wsrep_sst-user"')
+
+argparser.add_argument('--rep-pass','-p',
+                       action='store',
+                       nargs='?',
+                       help='The password for the MySQL wsrep replication user, "changeme"')
+
+argparser.add_argument('--root-pass','-P',
+                       action='store',
+                       nargs='?',
+                       help='The password for the MySQL wsrep root user, "changeme2"')
+
+argparser.add_argument('--boot-strap-cluster','-b',
+                       action='store_true',
+                       help='Boot strap the cluster, run mysqld with --wsrep-new-cluster')
+
 try:
    args = argparser.parse_args()
 except SystemExit:
@@ -80,6 +106,31 @@ for addr in args.member_addr:
    if not isIP(addr):
       print "The argument %s must be a valid IP address" % addr
       sys.exit(0) # This should be a return 0 to prevent the container from restarting.
+
+# If no value passed to cluster-name then warn that default value will be used
+cluster_name = args.cluster_name
+if cluster_name is None:
+   print "Warning! Default value of DBCluster being used for the MySQL wsrep cluster name"
+   cluster_name = 'DBCluster'   
+ 
+# If no value passed to rep-user then warn that default value will be used
+rep_user = args.rep_user
+if rep_user is None:
+   print "Warning! Default value of wsrep_sst-user being used for the wsrep replication user"
+   rep_user = 'wsrep_sst-user'
+
+# If no value passed to rep-pass then warn that default value will be used
+rep_pass = args.rep_pass
+if rep_pass is None:
+   print "Warning! Default value of changeme being used for the wsrep replication user password"
+   rep_pass = 'changeme'
+
+# If no value passed to root-pass then warn that default value will be used
+root_pass = args.root_pass
+if root_pass is None:
+   print "Warning! Default value of changeme2 being used for the MySQL root user password"
+   root_pass ='changeme2'
+
 
 ########################################################################################################################
 # Variables                                                                                                            #

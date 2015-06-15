@@ -42,7 +42,7 @@ RUN curl http://www.rabbitmq.com/rabbitmq-signing-key-public.asc | sudo apt-key 
 # Update the sources
 RUN apt-get update
 
-# download and install rabbitmq-server and extra packages - TODO: check if python is actually required (at the moment assume required for further srcipt)
+# download and install rabbitmq-server and extra packages
 RUN \
 	 sudo apt-get install rabbitmq-server python-software-properties python python-jinja2 python-ipy && \
 	apt-get clean && \
