@@ -42,6 +42,9 @@ RUN curl http://www.rabbitmq.com/rabbitmq-signing-key-public.asc | sudo apt-key 
 # Update the sources
 RUN apt-get update
 
+# Install Erlang packages
+RUN sudo apt-get install erlang erlang-doc
+
 # download and install rabbitmq-server and extra packages
 RUN \
 	 sudo apt-get install rabbitmq-server python-software-properties python python-jinja2 python-ipy && \
@@ -58,7 +61,7 @@ RUN \
 
 # Expose ports to other containers
 # Expose port 5672: RabbitMQ
-# Expose port 4369: clustering
+# Expose port 4369: clustering - epmd port
 # Expose port 25672: clustering
 EXPOSE 5672
 EXPOSE 4369

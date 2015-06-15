@@ -58,6 +58,8 @@ RUN \
 
 # Expose ports to other containers
 # Expose port 5672: RabbitMQ
-# Expose port 4369: clustering
+# Expose port 4369: clustering - epmd port
 # Expose port 25672: clustering
 EXPOSE 5672
+EXPOSE 4369
+EXPOSE 25672
