@@ -59,6 +59,10 @@ RUN \
     echo "Pacific/Auckland" > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata
 
+# Entry script
+COPY scripts/entry.py /usr/local/bin/entry
+RUN chmod +x /usr/local/bin/entry
+
 # Expose ports to other containers
 # Expose port 5672: RabbitMQ
 # Expose port 4369: clustering - epmd port
@@ -66,3 +70,6 @@ RUN \
 EXPOSE 5672
 EXPOSE 4369
 EXPOSE 25672
+
+# Define the default command as entrypoint
+ENTRYPOINT ["/usr/local/bin/entry"]
