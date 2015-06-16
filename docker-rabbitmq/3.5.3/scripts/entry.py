@@ -95,15 +95,6 @@ for addr in args.member_addr:
 ########################################################################################################################
 # Create list of cluster hosts from replication address and the other member address(es)
 cluster_hosts = [args.rep_addr] + args.member_addr
-# Sort this list by IP address
-for i in range(len(cluster_hosts)):
-   cluster_hosts[i] = "%3s.%3s.%3s.%3s" % tuple(cluster_hosts[i].split("."))
-cluster_hosts.sort()
-for i in range(len(cluster_hosts)):
-   cluster_hosts[i] = cluster_hosts[i].replace(" ", "")
-# Define value for wsrep_cluster_address in wsrep.cnf
-cluster_addr = "gcomm://"+','.join(cluster_hosts)
-
 
 ########################################################################################################################
 # Initialize MySQL on first run                                                                                        #
@@ -298,15 +289,7 @@ for template_item in template_list:
 ########################################################################################################################
 # Spawn the child
 child_path = ['/usr/sbin/mysqld']
-if args.boot_strap_cluster is True:
-   child_path.append('--wsrep-new-cluster') 
-
-if first_run is False:
-   # Flush anything on the buffer
-   sys.stdout.flush()
-   # Reopen stdout as unbuffered. This will mean log messages will appear as soon as they become avaliable.
-   sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
-
+# REMOVED CONTENT
 child = Popen(child_path, stdout = PIPE, stderr = STDOUT, shell = False) 
 
 # Output any log items to Docker
