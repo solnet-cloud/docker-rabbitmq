@@ -36,6 +36,8 @@ RUN \
 # Enable RabbitMQ application repository
 RUN echo "deb http://www.rabbitmq.com/debian/ testing main" >> /etc/apt/sources.list
 
+# install curl
+RUN sudo apt-get install curl
 # Add the verification key for the package
 RUN curl http://www.rabbitmq.com/rabbitmq-signing-key-public.asc | sudo apt-key add -
 
