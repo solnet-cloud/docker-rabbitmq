@@ -12,14 +12,14 @@ FROM ubuntu:14.04
 # Run Instructions:
 # When running use the following flags:
 #       --restart=on-failure  --log-driver=syslog
-# TODO
+# The following command line arguments are supported.
+# usage: entry rep_addr member_addr [member_addr ...]
 #
-#
+# positional arguments:
+#   rep_addr              The IP address for this node in cluster
+#   member_addr           IP address(es) for other member(s) of the cluster
 
-# NOTICE:
-#TODO
-#
-#
+
 # Information
 MAINTAINER Antonia Caskey <antonia.caskey@solnet.co.nz>
 LABEL Description="This image is used to stand up a RabbitMQ instance with clustering." Version="3.5.3"

@@ -12,9 +12,12 @@ FROM ubuntu:14.04
 # Run Instructions:
 # When running use the following flags:
 #       --restart=on-failure  --log-driver=syslog
-# TODO
+# The following command line arguments are supported.
+# usage: entry rep_addr member_addr [member_addr ...]
 #
-#
+# positional arguments:
+#   rep_addr              The IP address for this node in cluster
+#   member_addr           IP address(es) for other member(s) of the cluster
 
 # NOTICE:
 #TODO
@@ -69,7 +72,6 @@ EXPOSE 5672
 EXPOSE 4369
 EXPOSE 25672
 EXPOSE 15672
-
 
 EXPOSE 9100
 EXPOSE 9101
