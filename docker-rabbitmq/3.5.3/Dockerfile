@@ -54,6 +54,8 @@ RUN \
 	sudo /usr/sbin/rabbitmq-plugins enable rabbitmq_mqtt rabbitmq_stomp rabbitmq_management  rabbitmq_management_agent rabbitmq_management_visualiser rabbitmq_federation rabbitmq_federation_management sockjs
 
 # Change the rabbitmq-server file
+Run sudo mkdir /etc/default/rabbitmq-server
+
 RUN sudo cat config/rabbitmq-server > /etc/default/rabbitmq-server
 
 # Set timezone
