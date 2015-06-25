@@ -31,13 +31,13 @@ LABEL Description="This image is used to stand up a RabbitMQ instance with clust
 # Install any required packages
 # Updating our system's default application toolset
 RUN \
-	apt-get -qq update && \
-	apt-get -qq -y upgrade
+	apt-get -q update && \
+	apt-get -q -y upgrade
 # Enable RabbitMQ application repository
 RUN echo "deb http://www.rabbitmq.com/debian/ testing main" >> /etc/apt/sources.list
 
 # install curl
-RUN sudo apt-get -qq -y install curl
+RUN sudo apt-get -q -y install curl
 # Add the verification key for the package
 RUN curl http://www.rabbitmq.com/rabbitmq-signing-key-public.asc | sudo apt-key add -
 
@@ -45,18 +45,17 @@ RUN curl http://www.rabbitmq.com/rabbitmq-signing-key-public.asc | sudo apt-key 
 RUN apt-get update
 
 # Install Erlang packages
-RUN sudo apt-get -qq -y install erlang erlang-doc
+RUN sudo apt-get -q -y install erlang erlang-doc
 
 # download and install rabbitmq-server and extra packages
 RUN \
-	 sudo apt-get -qq -y install rabbitmq-server python-software-properties python python-jinja2 python-ipy && \
-	apt-get -qq clean && \
+	 sudo apt-get -q -y install rabbitmq-server python-software-properties python python-jinja2 python-ipy && \
+	apt-get -q clean && \
 	sudo /usr/sbin/rabbitmq-plugins enable rabbitmq_mqtt rabbitmq_stomp rabbitmq_management  rabbitmq_management_agent rabbitmq_management_visualiser rabbitmq_federation rabbitmq_federation_management sockjs
 
 # Change the rabbitmq-server file
-Run sudo mkdir /etc/default/rabbitmq-server
-
-RUN sudo cat config/rabbitmq-server > /etc/default/rabbitmq-server
+RUN ls
+COPY config/rabbitmq-server /etc/default/rabbitmq-server
 
 # Set timezone
 RUN \
