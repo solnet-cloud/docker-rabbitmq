@@ -45,12 +45,12 @@ RUN curl http://www.rabbitmq.com/rabbitmq-signing-key-public.asc | sudo apt-key 
 RUN apt-get update
 
 # Install Erlang packages
-RUN sudo apt-get install erlang erlang-doc
+RUN sudo apt-get -qq -y install erlang erlang-doc
 
 # download and install rabbitmq-server and extra packages
 RUN \
-	 sudo apt-get install rabbitmq-server python-software-properties python python-jinja2 python-ipy && \
-	apt-get clean && \
+	 sudo apt-get -qq -y install rabbitmq-server python-software-properties python python-jinja2 python-ipy && \
+	apt-get -qq clean && \
 	sudo /usr/sbin/rabbitmq-plugins enable rabbitmq_mqtt rabbitmq_stomp rabbitmq_management  rabbitmq_management_agent rabbitmq_management_visualiser rabbitmq_federation rabbitmq_federation_management sockjs
 
 # Change the rabbitmq-server file
