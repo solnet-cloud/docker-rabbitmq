@@ -53,21 +53,26 @@ RUN \
 	apt-get -q clean && \
 	sudo /usr/sbin/rabbitmq-plugins enable rabbitmq_mqtt rabbitmq_stomp rabbitmq_management  rabbitmq_management_agent rabbitmq_management_visualiser rabbitmq_federation rabbitmq_federation_management sockjs
 
+# Prepare directrories
+RUN \
+    mkdir -p /rmq-data/ && \
+    mkdir -p /rmq-templates
+
+ADD templates/rabbitmq.config /rmq-templates/rabbitmq.config
+
 # Change the rabbitmq-server file
-RUN ls
 COPY config/rabbitmq-server /etc/default/rabbitmq-server
+
+# Entry script
+COPY scripts/entry.py /usr/local/bin/entry
+RUN chmod +x /usr/local/bin/entry
 
 # Set timezone
 RUN \
     echo "Pacific/Auckland" > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata
 
-# Entry script
-COPY scripts/entry.py /usr/local/bin/entry
-RUN chmod +x /usr/local/bin/entry
-
 # Expose ports to other containers
-
 EXPOSE 5672
 EXPOSE 4369
 EXPOSE 25672
