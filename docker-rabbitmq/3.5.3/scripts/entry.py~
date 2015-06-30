@@ -168,4 +168,19 @@ except OSError as e:
 ########################################################################################################################
 # SPAWN CHILD                                                                                                          #
 ########################################################################################################################
+# Flush anything on the buffer
+sys.stdout.flush()
 
+# Spawn the child
+child_path = ["/logstash/bin/logstash", "-f", "/ls-data/conf/"]
+child = Popen(child_path, stdout = PIPE, stderr = STDOUT, shell = False) 
+
+# Reopen stdout as unbuffered. This will mean log messages will appear as soon as they become avaliable.
+sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
+
+# Output any log items to Docker
+for line in iter(child.stdout.readline, ''):
+    sys.stdout.write(line)
+
+# If the process terminates, read its errorcode and return it
+sys.exit(child.returncode)
