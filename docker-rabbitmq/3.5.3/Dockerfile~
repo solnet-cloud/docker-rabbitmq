@@ -20,6 +20,12 @@ FROM ubuntu:14.04
 #   member_addr           IP address(es) for other member(s) of the cluster
 
 
+# NOTICE: This is designed to be run as a cluster of RabbitMQ each running on separate physical hosts
+# (to achieve software and hardware redundancy) in active-active configuration.  It is recommended you utilise Weave for this.
+
+
+
+
 # Information
 MAINTAINER Antonia Caskey <antonia.caskey@solnet.co.nz>
 LABEL Description="This image is used to stand up a RabbitMQ instance with clustering." Version="3.5.3"

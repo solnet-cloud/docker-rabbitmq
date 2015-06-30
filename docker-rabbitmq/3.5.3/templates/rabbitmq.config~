@@ -1,2 +1,12 @@
 [{rabbit,
-  [{cluster_nodes, {['rabbit@rabbit1', 'rabbit@rabbit2', 'rabbit@rabbit3'], disc} } ] } ]
+  [{cluster_nodes,
+	{[ {% for item in ip_addresses %}
+		rabbit@{{item}}
+		{% if not loop.last %}
+    			,
+		{% endif %}
+		
+	],
+	disc}
+  }]
+}]
