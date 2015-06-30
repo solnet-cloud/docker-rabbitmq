@@ -77,8 +77,9 @@ for addr in args.member_addr:
 # Variables                                                                                                            #
 # Construct Variables from arguments passed                                                                            #
 ########################################################################################################################
-# Create list of cluster hosts from replication address and the other member address(es)
-cluster_hosts = [args.rep_addr] + args.member_addr
+
+homeAddr = args.rep_addr
+remoteAddrs = args.member_addr
 
 ########################################################################################################################
 # TEMPLATES                                                                                                            #
