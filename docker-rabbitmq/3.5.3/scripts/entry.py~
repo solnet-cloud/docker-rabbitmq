@@ -74,18 +74,96 @@ addrs = args.member_addr
 # This is where you manage any templates                                                                               #
 ########################################################################################################################
 
+# set template file location
 template_location = "/rmq-templates"
+### rabbitmq.config ###
 
+template = {}
 template_name = "rabbitmq.config"
-
 template_dict= {'content':{
 		'ip_addresses':addrs
 			},
 		'path':'',
 		'user':'root',
 		'group':'root',
-		'mode':'0644'
-			}
+		'mode':'0644'}
+template[template_name] = template_dict
+
+# Load in the files from the folder
+template_loader = FileSystemLoader(template_location)
+template_env = TemplateEnvironment(loader=template_loader,
+                                   lstrip_blocks=True,
+                                   trim_blocks=True,
+                                   keep_trailing_newline=True)
+
+ # Attempt to load the template
+try:
+	template[template_name]['template'] = template_env.get_template(template_name)
+except TemplateNotFound as e:
+	errormsg = "The template file %s was not found (returned %s)," % template_name, e
+	errormsg += " terminating..."
+	print errormsg
+	sys.exit(0) # This should be a return 0 to prevent the container from restarting
+# Attempt to open the file for writing
+try:
+	template[template_name]['file'] = open(template[template_name]['path'],'w')
+except IOError as e:
+	errormsg = "The file %s could not be opened for writing for template" % template[template_name]['path']
+       	errormsg += " %s (returned %s), terminating..." % template_name, e
+       	print errormsg
+       	sys.exit(0) # This should be a return 0 to prevent the container from restarting
+
+# Stream
+try:
+      	 template[template_name]['render'] = template[template_name]['template'].\
+                                            render(template[template_name]['context'])
+
+# Submit to file
+
+	template[template_name]['file'].write(template[template_name]['render'].encode('utf8'))	
+       	template[template_name]['file'].close()
+except:
+	e = sys.exc_info()[0]
+	print "Unrecognised exception occured, was unable to create template (returned %s), terminating..." % e
+	sys.exit(0) # This should be a return 0 to prevent the container from restarting.
+
+   # Change owner and group
+try:
+       template[template_name]['uid'] = pwd.getpwnam(template[template_name]['user']).pw_uid
+except KeyError as e:
+       errormsg = "The user %s does not exist for template %s" % template[template_name]['user'], template
+       errormsg += "(returned %s), terminating..." % e
+       print errormsg
+       sys.exit(0) # This should be a return 0 to prevent the container from restarting
+
+try:
+       template[template_name]['gid'] = grp.getgrnam(template[template_name]['group']).gr_gid
+except KeyError as e:
+       errormsg = "The group %s does not exist for template %s" % template[template_name]['group'], template_name
+       errormsg += "(returned %s), terminating..." % e
+       print errormsg
+       sys.exit(0) # This should be a return 0 to prevent the container from restarting
+
+try:
+       os.chown(template[template_name]['path'],
+                template[template_name]['uid'],
+                template[template_name]['gid'])
+except OSError as e:
+       errormsg = "The file %s could not be chowned for template" % template[template_name]['path']
+       errormsg += " %s (returned %s), terminating..." % template_name, e
+       print errormsg
+       sys.exit(0) # This should be a return 0 to prevent the container from restarting
+
+   # Change permissions
+try:
+       os.chmod(template[template_name]['path'],
+                template[template_name]['mode'])
+except OSError as e:
+       errormsg = "The file %s could not be chmoded for template" % template[template_name]['path']
+       errormsg += " %s (returned %s), terminating..." % template_name, e
+       print errormsg
+       sys.exit(0) # This should be a return 0 to prevent the container from restarting
+
 
 ########################################################################################################################
 # SPAWN CHILD                                                                                                          #
