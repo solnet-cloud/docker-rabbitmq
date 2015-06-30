@@ -36,15 +36,10 @@ def isIP(address):
 # ARGUMENT PARSER                                                                                                      #
 # This is where you put the Argument Parser lines                                                                      #
 ########################################################################################################################
-# A minimum of 2 positional arguments required:
-# rep_addr - The replication IP address of this node in the cluster
-# member_addr - Replication IP address(es) of other member(s) of the cluster
+# A minimum of 1 positional arguments required:
+# member_addr - IP address(es) of all member(s) of the cluster
 # These are used to allow the nodes to be successfully clustered
 argparser = argparse.ArgumentParser(description='Run a docker container containing a RabbitMQ Instance')
-
-argparser.add_argument('rep_addr',
-                       action='store',
-                       help='The replication IP address for this node in the cluster')
 
 argparser.add_argument('member_addr',
                        action='store',
@@ -62,11 +57,6 @@ except SystemExit:
 # This is where you put any logic to verify the arguments, and failure messages                                        #
 ########################################################################################################################
 # 
-# Check that rep_addr is a valid IP address
-if not isIP(args.rep_addr):
-   print "The argument %s must be a valid IP address" % args.rep_addr
-   sys.exit(0) # This should be a return 0 to prevent the container from restarting.
-
 # Check that other cluster addresses are valid
 for addr in args.member_addr:
    if not isIP(addr):
@@ -77,9 +67,7 @@ for addr in args.member_addr:
 # Variables                                                                                                            #
 # Construct Variables from arguments passed                                                                            #
 ########################################################################################################################
-
-homeAddr = args.rep_addr
-remoteAddrs = args.member_addr
+addrs = args.member_addr
 
 ########################################################################################################################
 # TEMPLATES                                                                                                            #

@@ -13,18 +13,14 @@ FROM ubuntu:14.04
 # When running use the following flags:
 #       --restart=on-failure  --log-driver=syslog
 # The following command line arguments are supported.
-# usage: entry rep_addr member_addr [member_addr ...]
+# usage: entry member_addr [member_addr ...]
 #
 # positional arguments:
-#   rep_addr              The IP address for this node in cluster
 #   member_addr           IP address(es) for other member(s) of the cluster
 
 
 # NOTICE: This is designed to be run as a cluster of RabbitMQ each running on separate physical hosts
 # (to achieve software and hardware redundancy) in active-active configuration.  It is recommended you utilise Weave for this.
-
-
-
 
 # Information
 MAINTAINER Antonia Caskey <antonia.caskey@solnet.co.nz>
