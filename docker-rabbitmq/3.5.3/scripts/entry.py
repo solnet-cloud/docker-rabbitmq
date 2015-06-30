@@ -2,7 +2,7 @@
 # This script parses command line arguments and uses these to create nodes for the RabbitMQ service
 
 ########################################################################################################################
-# LIBRARY IMPORT  TODO: Seemingly I don't need to remove any parts of this code, but it could be better form to not    #
+# LIBRARY IMPORT												       #
 ########################################################################################################################
 # Import required libaries
 import sys,os,pwd,grp   # OS Libraries
