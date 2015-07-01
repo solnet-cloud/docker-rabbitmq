@@ -3,7 +3,7 @@
 	{[ {% for item in ip_addresses %}
 		rabbit@{{item}}
 		{% if not loop.last %}
-		,
+			,
 		{% endif %}
 		
 	],
