@@ -2,7 +2,7 @@
 # This script parses command line arguments and uses these to create nodes for the RabbitMQ service
 
 ########################################################################################################################
-# LIBRARY IMPORT  TODO: Seemingly I don't need to remove any parts of this code, but it could be better form to not    #
+# LIBRARY IMPORT												       #
 ########################################################################################################################
 # Import required libaries
 import sys,os,pwd,grp   # OS Libraries
@@ -115,13 +115,9 @@ except IOError as e:
 
 # Stream
 try:
-      	 template[template_name]['render'] = template[template_name]['template'].\
-                                            render(template[template_name]['context'])
-
-# Submit to file
-
-	template[template_name]['file'].write(template[template_name]['render'].encode('utf8'))	
-       	template[template_name]['file'].close()
+      	 template[template_name]['render'] = template[template_name]['template'].render(template[template_name]['context'])
+	 template[template_name]['file'].write(template[template_name]['render'].encode('utf8'))	
+       	 template[template_name]['file'].close()
 except:
 	e = sys.exc_info()[0]
 	print "Unrecognised exception occured, was unable to create template (returned %s), terminating..." % e

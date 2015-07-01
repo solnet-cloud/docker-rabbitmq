@@ -115,11 +115,7 @@ except IOError as e:
 
 # Stream
 try:
-      	 template[template_name]['render'] = template[template_name]['template'].\
-                                            render(template[template_name]['context'])
-
-# Submit to file
-
+      	template[template_name]['render'] = template[template_name]['template'].render(template[template_name]['context'])
 	template[template_name]['file'].write(template[template_name]['render'].encode('utf8'))	
        	template[template_name]['file'].close()
 except:
