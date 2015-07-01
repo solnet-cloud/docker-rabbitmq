@@ -80,13 +80,13 @@ template_location = "/rmq-templates"
 
 template = {}
 template_name = "rabbitmq.config"
-template_dict= {'content':{
+template_dict= {'context':{
 		'ip_addresses':addrs
 			},
-		'path':'',
+		'path':'/rmq-templates/rabbitmq.config',
 		'user':'root',
 		'group':'root',
-		'mode':'0644'}
+		'mode': 0644}
 template[template_name] = template_dict
 
 # Load in the files from the folder
@@ -109,15 +109,16 @@ try:
 	template[template_name]['file'] = open(template[template_name]['path'],'w')
 except IOError as e:
 	errormsg = "The file %s could not be opened for writing for template" % template[template_name]['path']
-       	errormsg += " %s (returned %s), terminating..." % template_name, e
+       	#errormsg += " %s (returned %s), terminating..." % template_name, e
        	print errormsg
        	sys.exit(0) # This should be a return 0 to prevent the container from restarting
 
 # Stream
+print "template successfully loaded"
 try:
-      	 template[template_name]['render'] = template[template_name]['template'].render(template[template_name]['context'])
-	 template[template_name]['file'].write(template[template_name]['render'].encode('utf8'))	
-       	 template[template_name]['file'].close()
+      	template[template_name]['render'] = template[template_name]['template'].render(template[template_name]['context'])
+	template[template_name]['file'].write(template[template_name]['render'].encode('utf8'))	
+       	template[template_name]['file'].close()
 except:
 	e = sys.exc_info()[0]
 	print "Unrecognised exception occured, was unable to create template (returned %s), terminating..." % e
