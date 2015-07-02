@@ -169,7 +169,7 @@ except OSError as e:
 sys.stdout.flush()
 
 # Spawn the child
-child_path = ["/usr/lib/rabbitmq/bin/rabbitmq-server", "start"]
+child_path = ["/usr/lib/rabbit				mq/bin/rabbitmq-server", "start"]
 child = Popen(child_path, stdout = PIPE, stderr = STDOUT, shell = False) 
 
 # Reopen stdout as unbuffered. This will mean log messages will appear as soon as they become avaliable.
