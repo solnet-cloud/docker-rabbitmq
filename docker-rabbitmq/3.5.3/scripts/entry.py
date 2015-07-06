@@ -60,7 +60,7 @@ template_name = "rabbitmq.config"
 template_dict= {'context':{
 		'ip_addresses':addrs
 			},
-		'path':'/rmq-templates/rabbitmq.config',
+		'path':'/etc/rabbitmq/rabbitmq.config',
 		'user':'root',
 		'group':'root',
 		'mode': 0644}
