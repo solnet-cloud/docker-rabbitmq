@@ -55,6 +55,10 @@ RUN \
 	apt-get -q clean && \
 	sudo /usr/sbin/rabbitmq-plugins enable rabbitmq_mqtt rabbitmq_stomp rabbitmq_management  rabbitmq_management_agent rabbitmq_management_visualiser rabbitmq_federation rabbitmq_federation_management sockjs
 
+ADD erlang.cookie /var/lib/rabbitmq/.erlang.cookie
+RUN chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie
+RUN chmod 400 /var/lib/rabbitmq/.erlang.cookie
+
 # Prepare directrories
 RUN \
     mkdir -p /rmq-data/ && \
