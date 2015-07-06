@@ -21,17 +21,6 @@ from jinja2.exceptions import TemplateNotFound
 from IPy import IP
 from shutil import copyfile
 
-# Functions
-
-# Checks if an ip address is valid or not
-def isIP(address):
-   try:
-      IP(address)
-      ip = True
-   except ValueError:
-      ip = False
-   return ip
-
 ########################################################################################################################
 # ARGUMENT PARSER                                                                                                      #
 # This is where you put the Argument Parser lines                                                                      #
@@ -50,18 +39,6 @@ try:
    args = argparser.parse_args()
 except SystemExit:
    sys.exit(0) # This should be a return 0 to prevent the container from restarting.
-
-    
-########################################################################################################################
-# ARGUMENT VERIRIFCATION                                                                                               #
-# This is where you put any logic to verify the arguments, and failure messages                                        #
-########################################################################################################################
-# 
-# Check that other cluster addresses are valid
-for addr in args.member_addr:
-   if not isIP(addr):
-      print "The argument %s must be a valid IP address" % addr
-      sys.exit(0) # This should be a return 0 to prevent the container from restarting.
 
 ########################################################################################################################
 # Variables                                                                                                            #
